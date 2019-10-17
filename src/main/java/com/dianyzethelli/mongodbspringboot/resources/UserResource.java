@@ -45,17 +45,17 @@ public class UserResource {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity <Void> insert(@RequestBody UserDTO objDto) { // mais robusto utilizar ResponseEntity passando a lista dentro <>
+	public ResponseEntity<Void> insert(@RequestBody UserDTO objDto) { // mais robusto utilizar ResponseEntity passando a lista dentro <>
 		User obj = service.fromDTO(objDto); //converteu DTO para user
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
-	//@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
-	//public ResponseEntity <UserDTO> findById(@PathVariable String id){ // mais robusto utilizar ResponseEntity passando a lista dentro <>
-		//User obj = service.findById(id);
-		//return ResponseEntity.ok().body(new UserDTO(obj));
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable String id) { // mais robusto utilizar ResponseEntity passando a lista dentro <>
+		service.delete(id);
+		return ResponseEntity.noContent().build();//quando a resposta não retorna nada, o código é 204 noContent().
 
-	//}
+	}
 }
