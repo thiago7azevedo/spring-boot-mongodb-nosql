@@ -41,21 +41,29 @@ public class UserResource {
 	public ResponseEntity <UserDTO> findById(@PathVariable String id){ // mais robusto utilizar ResponseEntity passando a lista dentro <>
 		User obj = service.findById(id);
 		return ResponseEntity.ok().body(new UserDTO(obj));
-
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody UserDTO objDto) { // mais robusto utilizar ResponseEntity passando a lista dentro <>
 		User obj = service.fromDTO(objDto); //converteu DTO para user
-		obj = service.insert(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).build();
+		obj = service.insert(obj); // inseriu no banco de dados
+		// boa pratica a seguir: colocar no cabeçalho a url do novo recurso criado (URI) 
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		// pega o endereço do novo objeto inserido e coloca na uri
+		return ResponseEntity.created(uri).build(); //created(uri)/retorna o código 201 http do novo recurso criado
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable String id) { // mais robusto utilizar ResponseEntity passando a lista dentro <>
 		service.delete(id);
 		return ResponseEntity.noContent().build();//quando a resposta não retorna nada, o código é 204 noContent().
-
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody UserDTO objDto, @PathVariable String id) {
+		User obj = service.fromDTO(objDto);
+		obj.setId(id);
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
 	}
 }
