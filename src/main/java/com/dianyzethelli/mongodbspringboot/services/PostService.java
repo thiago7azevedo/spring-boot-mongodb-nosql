@@ -1,5 +1,6 @@
 package com.dianyzethelli.mongodbspringboot.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,9 @@ public class PostService {
 		Optional<Post> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!!!"));
 		}
+	// método criado para atrelar com o repositario onde temos um método igual
+	public List<Post> findByTitle(String text){		
+		return repo.findByTitleContainingIgnoreCase(text);
+	}
 	
 }
