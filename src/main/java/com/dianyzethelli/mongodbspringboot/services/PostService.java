@@ -22,7 +22,7 @@ public class PostService {
 		}
 	// método criado para atrelar com o repositario onde temos um método igual
 	public List<Post> findByTitle(String text){		
-		return repo.findByTitleContainingIgnoreCase(text);
+		return repo.searchTitle(text);
 	}
 	
 }
